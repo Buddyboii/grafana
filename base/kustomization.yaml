@@ -1,0 +1,8 @@
+resources:
+- alertmanager-dashboard.yml
+- grafana-overview-dashboard.yml
+- workload-total.yml
+- node-dashboard.yml
+
+
+

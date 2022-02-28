@@ -1,0 +1,45 @@
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: prometheus-grafanadatasource
+  namespace: monitoring
+  labels:
+    name: grafana-operator
+    app: grafana
+spec:
+  name: prometheus.yaml
+  datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus-operated.monitoring.svc.cluster.local:9090
+      version: 1
+      isDefault: false
+      editable: true
+      jsonData:
+        tlsSkipVerify: true
+        timeInterval: "5s"
+
+---
+
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: alertmanager-grafanadatasource
+  namespace: monitoring
+  labels:
+    name: grafana-operator
+    app: grafana
+spec:
+  name: alertmanager.yaml
+  datasources:
+    - name: Alertmanager
+      type: alertmanager
+      access: proxy
+      url: http://alertmanager-operated.monitoring.svc.cluster.local:9093
+      isDefault: false
+      editable: true
+      jsonData:
+        implementation: 'prometheus'
+        tlsSkipVerify: true
+        timeInterval: "5s"

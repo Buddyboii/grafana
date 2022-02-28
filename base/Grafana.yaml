@@ -1,0 +1,47 @@
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  config:
+    log:
+      mode: "console"
+      level: "warn"
+    log.frontend:
+      enabled: true
+    security:
+      admin_user: "admin"
+      admin_password: "admin"
+    auth:
+      disable_login_form: False
+      disable_signout_menu: False
+    auth.anonymous:
+      enabled: False
+  deployment:
+    labels:
+      app: "grafana"
+    skipCreateAdminAccount: true
+  service:
+    name: "grafana-service"
+    labels:
+      app: "grafana"
+      type: "grafana-service"
+    ports:
+    - port: 3000
+      nodePort: 30000
+      targetPort: 3000
+      protocol: TCP
+  dashboardLabelSelector:
+    - matchExpressions:
+        - { key: app, operator: In, values: [grafana] }
+    - matchExpressions:
+        - { key: name, operator: In, values: [grafana-operator] }
+  resources:
+    # Optionally specify container resources
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
